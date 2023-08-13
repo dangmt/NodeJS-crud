@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const fileUpload = require("express-fileupload");
 
 const bodyParser = require("body-parser");
 const Product = require("./Schema/product"); // Import your Product model
@@ -17,11 +18,9 @@ const paypalController = require("./Controller/paypal");
 
 require("./db"); // Import and run your MongoDB connection setup
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-fs = require("fs");
-fs.readFile("./", (err, data) => {});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 // Your routes and application logic go here
 app.use("/", cartItemController);
