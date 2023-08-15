@@ -27,7 +27,7 @@ router.get("/paypal/cancel", (req, res) => {
 // Create a PayPal payment
 router.get("/paypal", async (req, res) => {
   try {
-    const cartItems = await CartItem.find().populate("product");
+    const cartItems = await CartItem.find().populate("productId");
 
     const orderAmount = calculateOrderTotal(cartItems);
 
@@ -44,10 +44,10 @@ router.get("/paypal", async (req, res) => {
         {
           item_list: {
             items: cartItems.map((cartItem) => ({
-              name: cartItem.product.name,
+              name: cartItem.productId.name,
               currency: "USD",
               quantity: cartItem.quantity,
-              price: cartItem.product.price.toFixed(2),
+              price: cartItem.productId.price.toFixed(2),
             })),
           },
           amount: {
@@ -77,7 +77,7 @@ function calculateOrderTotal(cartItems) {
   let orderAmount = 0;
 
   for (const cartItem of cartItems) {
-    orderAmount += cartItem.product.price * cartItem.quantity;
+    orderAmount += cartItem.productId.price * cartItem.quantity;
   }
 
   return orderAmount;

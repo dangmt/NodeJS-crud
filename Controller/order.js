@@ -10,11 +10,11 @@ router.post("/orders", async (req, res) => {
     const order = new Order();
     await order.save();
 
-    const cartItems = await CartItem.find().populate("product");
+    const cartItems = await CartItem.find().populate("productId");
     for (const cartItem of cartItems) {
       const orderItem = new OrderItem({
         order: order._id,
-        product: cartItem.product._id,
+        product: cartItem.productId._id,
         quantity: cartItem.quantity,
       });
       await orderItem.save();
@@ -30,7 +30,7 @@ router.post("/orders", async (req, res) => {
 });
 
 // Get an order by ID
-router.get("orders/:orderId", async (req, res) => {
+router.get("/orders/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const order = await Order.findById(orderId).populate("orderItems");
@@ -45,7 +45,7 @@ router.get("orders/:orderId", async (req, res) => {
 });
 
 // Update an order
-router.put("orders/:orderId", async (req, res) => {
+router.put("/orders/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const existingOrder = await Order.findById(orderId);
@@ -65,7 +65,7 @@ router.put("orders/:orderId", async (req, res) => {
 });
 
 // Delete an order
-router.delete("orders/:orderId", async (req, res) => {
+router.delete("/orders/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
     const order = await Order.findById(orderId);
@@ -91,6 +91,14 @@ router.get("/orders", async (req, res) => {
   } catch (error) {
     console.error("Error fetching orders:", error);
     res.status(500).send("Internal server error");
+  }
+});
+router.delete("/orders", async (req, res) => {
+  try {
+    const orders = await Order.deleteMany();
+    res.status(200).json("success");
+  } catch (error) {
+    res.status(500).json("Internal server error");
   }
 });
 

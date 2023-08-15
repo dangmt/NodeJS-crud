@@ -14,14 +14,14 @@ router.post("/cartitems", async (req, res) => {
       return res.status(404).send("Product not found");
     }
     quantity = parseInt(quantity);
-    let cartItem = await CartItem.findOne({ product: productId });
+    let cartItem = await CartItem.findOne({ productId: productId });
     if (cartItem) {
       cartItem.quantity += quantity;
       await cartItem.save();
       res.status(200).send("Product quantity updated in cart");
     } else {
       cartItem = new CartItem({
-        product: productId,
+        productId: productId,
         quantity: quantity,
       });
       await cartItem.save();

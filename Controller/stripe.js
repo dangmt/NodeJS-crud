@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Replace with your S
 // Get payment intent
 router.get("/stripe", async (req, res) => {
   try {
-    const cartItems = await CartItem.find().populate("product");
+    const cartItems = await CartItem.find().populate("productId");
 
     const orderAmount = calculateOrderTotal(cartItems);
 
@@ -30,7 +30,7 @@ function calculateOrderTotal(cartItems) {
   let orderAmount = 0;
 
   for (const cartItem of cartItems) {
-    orderAmount += cartItem.product.price * cartItem.quantity;
+    orderAmount += cartItem.productId.price * cartItem.quantity;
   }
 
   return orderAmount;
