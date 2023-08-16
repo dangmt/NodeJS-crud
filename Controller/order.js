@@ -18,7 +18,7 @@ router.post("/orders", async (req, res) => {
         quantity: cartItem.quantity,
       });
       await orderItem.save();
-      order.orderItems.push(orderItem);
+      order.orderItems.push(orderItem._id);
       await order.save();
     }
 
@@ -33,7 +33,7 @@ router.post("/orders", async (req, res) => {
 router.get("/orders/:orderId", async (req, res) => {
   try {
     const { orderId } = req.params;
-    const order = await Order.findById(orderId).populate("orderItems");
+    const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).send("Order not found");
     }
@@ -85,7 +85,7 @@ router.delete("/orders/:orderId", async (req, res) => {
 // Get all orders
 router.get("/orders", async (req, res) => {
   try {
-    const orders = await Order.find().populate("orderItems");
+    const orders = await Order.find();
     console.log((await OrderItem.find()).toString());
     res.status(200).json(orders);
   } catch (error) {
