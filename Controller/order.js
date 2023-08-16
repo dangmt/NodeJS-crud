@@ -73,7 +73,7 @@ router.delete("/orders/:orderId", async (req, res) => {
       return res.status(404).send("Order not found");
     }
 
-    await OrderItem.deleteMany({ order: orderId });
+    await OrderItem.deleteMany({ orderId: orderId });
     await order.deleteOne();
     res.status(200).send("Order deleted successfully");
   } catch (error) {
