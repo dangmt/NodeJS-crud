@@ -10,11 +10,11 @@ router.post("/orders", async (req, res) => {
     const order = new Order();
     await order.save();
 
-    const cartItems = await CartItem.find().populate("productId");
+    const cartItems = await CartItem.find();
     for (const cartItem of cartItems) {
       const orderItem = new OrderItem({
         orderId: order._id,
-        productId: cartItem.productId._id,
+        productId: cartItem.productId,
         quantity: cartItem.quantity,
       });
       await orderItem.save();
@@ -85,7 +85,7 @@ router.delete("/orders/:orderId", async (req, res) => {
 // Get all orders
 router.get("/orders", async (req, res) => {
   try {
-    const orders = await Order.find();
+    const orders = await Order.find().populate("orderItems");
     console.log((await OrderItem.find()).toString());
     res.status(200).json(orders);
   } catch (error) {
