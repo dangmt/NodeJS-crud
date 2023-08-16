@@ -13,8 +13,8 @@ router.post("/orders", async (req, res) => {
     const cartItems = await CartItem.find().populate("productId");
     for (const cartItem of cartItems) {
       const orderItem = new OrderItem({
-        order: order._id,
-        product: cartItem.productId._id,
+        orderId: order._id,
+        productId: cartItem.productId._id,
         quantity: cartItem.quantity,
       });
       await orderItem.save();
