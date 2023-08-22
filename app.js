@@ -13,7 +13,7 @@ const productController = require("./Controller/product");
 const cartItemController = require("./Controller/cartitem");
 const orderController = require("./Controller/order");
 const stripeController = require("./Controller/stripe");
-
+const sendemailController = require("./Controller/sendemail");
 const paypalController = require("./Controller/paypal");
 
 require("./db"); // Import and run your MongoDB connection setup
@@ -28,6 +28,7 @@ app.use("/", productController);
 app.use("/", orderController);
 app.use("/", stripeController);
 app.use("/", paypalController);
+app.use("/", sendemailController);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
