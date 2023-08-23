@@ -112,5 +112,36 @@ function deleteImage(imagePath) {
     fs.unlinkSync(oldImagePath);
   }
 }
+router.post("/products/search", async (req, res) => {
+  const {
+    keyword = "",
+    sort = "_id",
+    order = "asc",
+    page = 0,
+    size = 10,
+  } = req.body;
 
+  const sortOptions = { [sort]: order === "asc" ? 1 : -1 };
+  const skip = parseInt(page) * parseInt(size);
+  const limit = parseInt(size);
+
+  const query = keyword ? { name: { $regex: keyword, $options: "i" } } : {};
+
+  try {
+    const totalCount = await Product.countDocuments(query);
+    const products = await Product.find(query)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      items: products,
+      page: parseInt(page),
+      pageSize: parseInt(size),
+      totalCount: totalCount,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 module.exports = router;
