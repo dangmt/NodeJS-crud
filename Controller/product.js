@@ -121,7 +121,7 @@ router.post("/products/search", async (req, res) => {
     size = 10,
   } = req.body;
 
-  const sortOptions = { [sort]: order === "asc" ? 1 : -1 };
+  const sortOptions = { [sort]: order.toLowerCase() === "asc" ? 1 : -1 };
   const skip = parseInt(page) * parseInt(size);
   const limit = parseInt(size);
 
